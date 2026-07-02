@@ -8,7 +8,7 @@ from src.report_annotator import annotate_pdf
 import shutil
 import os
 
-# this is required
+
 
 app = FastAPI(title="SiteSentry API", version="1.0.0")
 
@@ -18,6 +18,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# orchestrator
 
 orchestrator = Orchestrator()
 
