@@ -17,6 +17,7 @@ class AgentPanel:
         results = self.store.query(query, report_id, top_k = top_k)
         docs= results.get("documents", [[]])[0]
         return "\n\n".join(docs)
+        # retieval
     
 
 
