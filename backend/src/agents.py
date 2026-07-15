@@ -13,6 +13,10 @@ class AgentPanel:
         self.compliance = ComplianceChecker()
 
 
+    # retrieval
+    
+
+
     def _retrieve(self, query: str, report_id: str, top_k: int =4):
         results = self.store.query(query, report_id, top_k = top_k)
         docs= results.get("documents", [[]])[0]
