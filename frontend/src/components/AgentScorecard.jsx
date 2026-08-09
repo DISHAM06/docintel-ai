@@ -1,20 +1,20 @@
 function AgentScorecard({ result }) {
   const agentColors = {
-    engineering: "#2196F3",
-    cost: "#4CAF50",
-    timeline: "#FF9800",
-    compliance: "#9C27B0",
-    safety: "#F44336",
-    reviewer: "#1a1a2e"
+    executive_summary: "#2196F3",
+    key_insights: "#4CAF50",
+    citations: "#FF9800",
+    document_validation: "#9C27B0",
+    highlights: "#F44336",
+    response_composer: "#1a1a2e"
   };
 
   const agentIcons = {
-    engineering: "🏗️",
-    cost: "💰",
-    timeline: "📅",
-    compliance: "📋",
-    safety: "⛑️",
-    reviewer: "🔍"
+    executive_summary: "📝",
+    key_insights: "💡",
+    citations: "🔖",
+    document_validation: "✅",
+    highlights: "✨",
+    response_composer: "🔍"
   };
 
   return (

@@ -10,14 +10,14 @@ export default function UploadPage({ onResult, onBack }) {
 
   const messages = [
     "Extracting and chunking PDF...",
-    "Building vector index...",
-    "Running Engineering Agent...",
-    "Running Cost Realism Agent...",
-    "Running Timeline Agent...",
-    "Running Compliance Agent...",
-    "Running Safety Agent...",
-    "Reviewer Agent synthesizing results...",
-    "Annotating PDF with findings...",
+    "Creating document retrieval index...",
+    "Running Executive Summary Agent...",
+    "Running Key Insights Agent...",
+    "Running Citations Agent...",
+    "Running Document Validation Agent...",
+    "Running Highlights Agent...",
+    "Response Composer synthesizing results...",
+    "Annotating PDF with document highlights...",
     "Almost done..."
   ];
 
@@ -64,7 +64,7 @@ export default function UploadPage({ onResult, onBack }) {
           style={{ background: "none", border: "none", cursor: "pointer",
             fontSize: "1.2rem", color: "#1a1a2e" }}>←</button>
         <span style={{ fontWeight: "800", fontSize: "1.2rem" }}>
-          Site<span style={{ color: "#e94560" }}>Sentry</span>
+          Doc<span style={{ color: "#e94560" }}>Intel</span>
         </span>
       </div>
 
@@ -78,16 +78,16 @@ export default function UploadPage({ onResult, onBack }) {
           {!loading ? (
             <>
               <h2 style={{ margin: "0 0 0.5rem", color: "#1a1a2e", fontSize: "1.6rem" }}>
-                Upload Project Report
+                Upload Document
               </h2>
               <p style={{ color: "#888", marginBottom: "2rem", fontSize: "0.95rem" }}>
-                Upload a construction DPR PDF for AI-powered risk assessment
+               Upload a PDF for AI document intelligence analysis
               </p>
 
               <div style={{ marginBottom: "1.25rem" }}>
                 <label style={{ display: "block", marginBottom: "6px",
                   fontWeight: "600", fontSize: "0.9rem", color: "#1a1a2e" }}>
-                  PDF Report *
+                  PDF Document *
                 </label>
                 <input type="file" accept=".pdf"
                   onChange={e => setFile(e.target.files[0])}
@@ -102,26 +102,26 @@ export default function UploadPage({ onResult, onBack }) {
               <div style={{ marginBottom: "1.25rem" }}>
                 <label style={{ display: "block", marginBottom: "6px",
                   fontWeight: "600", fontSize: "0.9rem", color: "#1a1a2e" }}>
-                  Project Type
+                 Analysis Mode
                 </label>
                 <select value={projectType} onChange={e => setProjectType(e.target.value)}
                   style={inputStyle}>
-                  <option value="residential">Residential</option>
-                  <option value="commercial">Commercial</option>
-                  <option value="industrial">Industrial</option>
+                  <option value="residential">Summary</option>
+                  <option value="commercial">Question Answering</option>
+                  <option value="industrial">Key Insights</option>
                 </select>
               </div>
 
               <div style={{ marginBottom: "2rem" }}>
                 <label style={{ display: "block", marginBottom: "6px",
                   fontWeight: "600", fontSize: "0.9rem", color: "#1a1a2e" }}>
-                  City Tier
+                 Ai-Model
                 </label>
                 <select value={cityTier} onChange={e => setCityTier(e.target.value)}
                   style={inputStyle}>
-                  <option value="tier_1">Tier 1 — Mumbai, Delhi, Pune</option>
-                  <option value="tier_2">Tier 2 — Jaipur, Lucknow</option>
-                  <option value="tier_3">Tier 3 — Smaller cities</option>
+                  <option value="tier_1">Fast</option>
+                  <option value="tier_2">Balanced</option>
+                  <option value="tier_3">Detailed</option>
                 </select>
               </div>
 
@@ -132,7 +132,7 @@ export default function UploadPage({ onResult, onBack }) {
                 fontSize: "1rem", fontWeight: "700",
                 cursor: "pointer", letterSpacing: "0.5px"
               }}>
-                Analyze Report →
+             Analyze Document →
               </button>
             </>
           ) : (
@@ -143,7 +143,7 @@ export default function UploadPage({ onResult, onBack }) {
                 animation: "spin 1s linear infinite",
                 margin: "0 auto 1.5rem"
               }} />
-              <h3 style={{ color: "#1a1a2e", marginBottom: "0.5rem" }}>Analyzing Report</h3>
+              <h3 style={{ color: "#1a1a2e", marginBottom: "0.5rem" }}>Analyzing Document...</h3>
               <p style={{ color: "#888", fontSize: "0.9rem" }}>{loadingMsg}</p>
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </div>

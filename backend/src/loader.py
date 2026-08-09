@@ -3,7 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 def load_and_chunk_report(path: str, chunk_size: int= 1000, chunk_overlap: int=150):
     """
-    Loads a construction project report PDF and splits it into
+    Loads an uploaded document PDF and splits it into
     overlapping chunks suitable for embedding + retrieval.
 
     chunk_size: max characters per chunk

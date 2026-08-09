@@ -1,29 +1,39 @@
 import { useState } from "react";
 import HomePage from "./pages/HomePage";
 import UploadPage from "./pages/UploadPage";
-import ResultsPage from "./pages/ResultsPage";
+import AnalysisPage from "./pages/AnalysisPage";
 
 function App() {
+  // Controls which page is currently visible
   const [page, setPage] = useState("home");
-  const [result, setResult] = useState(null);
+
+  // Stores the AI analysis result returned from backend
+  const [analysisResult, setAnalysisResult] = useState(null);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-950">
+      {/* Landing Page */}
       {page === "home" && (
-        <HomePage onStart={() => setPage("upload")} />
+        <HomePage
+          onStart={() => setPage("upload")}
+        />
       )}
+
+      {/* Upload Document Page */}
       {page === "upload" && (
         <UploadPage
           onResult={(data) => {
-            setResult(data);
-            setPage("results");
+            setAnalysisResult(data);
+            setPage("analysis");
           }}
           onBack={() => setPage("home")}
         />
       )}
-      {page === "results" && (
-        <ResultsPage
-          result={result}
+
+      {/* AI Analysis Results */}
+      {page === "analysis" && (
+        <AnalysisPage
+          result={analysisResult}
           onBack={() => setPage("upload")}
         />
       )}

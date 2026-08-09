@@ -1,16 +1,11 @@
 from src.llm_engine import LLMEngine
 from src.vectorstore import ReportVectorStore
-from src.cost_engine import CostEngine
-from src.schedule_simulator import ScheduleSimulator
-from src.compliance_checklist import ComplianceChecker
+
 
 class AgentPanel:
     def __init__(self):
         self.llm = LLMEngine()
         self.store = ReportVectorStore()
-        self.cost_engine= CostEngine()
-        self.schedule_sim = ScheduleSimulator()
-        self.compliance = ComplianceChecker()
 
 
     # retrieval
@@ -25,72 +20,92 @@ class AgentPanel:
     
 
 
-    def engineering_agent(self, report_id: str, full_text: str):
-        context = self._retrieve("structural design foundation materials specifications", report_id)
-        prompt = f"""You are a senior structural reviewing a construction project report.
-Analyze the following extracted sections for engineering feasibility.
-Flag any missing structural details, design risks, or specification gaps.
-Be concise and structured.
+    def executive_summary_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("executive summary key overview document purpose main findings", report_id)
+        prompt = f"""You are an expert document intelligence analyst.
+Summarize the provided document content for a broad audience.
+Focus on the main purpose, key themes, critical findings, and any notable gaps.
+Keep the summary concise, structured, and suitable for legal, business, technical, or academic documents.
 
-Report Sections:
+Document Sections:
 {context}"""
-        return self.llm.chat(system_prompt=prompt, user_message="Provide your engineering assessment.")
+        return self.llm.chat(system_prompt=prompt, user_message="Provide an executive summary.")
 
-    def timeline_agent(self, report_id: str, full_text: str):
-        context = self._retrieve("project timeline schedule phases completion duration", report_id)
-        schedule_analysis = self.schedule_sim.analyze(full_text)
-        prompt = f"""You are a construction project scheduler.
-Review the project timeline. You also have Monte Carlo simulation results below.
+    def semantic_search_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("question answer relevant evidence document content", report_id)
+        prompt = f"""You are a semantic retrieval specialist.
+Answer the user's question using only the retrieved document sections below.
+If information is not present, say so clearly and avoid hallucinating.
+Be precise and reference the content directly.
 
-Simulation Results: {schedule_analysis}
-
-Report Sections:
+Document Sections:
 {context}"""
-        return self.llm.chat(system_prompt=prompt, user_message="Provide your timeline risk assessment.")
+        return self.llm.chat(system_prompt=prompt, user_message="Answer the document question using the provided context.")
 
-    def compliance_agent(self, report_id: str, full_text: str):
-        context = self._retrieve("permits approvals clearance certificates regulatory", report_id)
-        compliance_result = self.compliance.check(full_text)
-        prompt = f"""You are a regulatory compliance expert for private construction projects in India.
-Review compliance status. You have a deterministic checklist result below.
+    def citation_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("supporting evidence citation page references source snippet", report_id)
+        prompt = f"""You are a citation and evidence extraction specialist.
+Identify supporting evidence from the retrieved document sections.
+Return the most relevant quotes, excerpts, or snippets and any available page or section references.
+If references are unavailable, state that clearly.
 
-Checklist Result: {compliance_result}
-
-Report Sections:
+Document Sections:
 {context}"""
-        return self.llm.chat(system_prompt=prompt, user_message="Provide your compliance assessment.")
+        return self.llm.chat(system_prompt=prompt, user_message="Extract supporting citations and evidence.")
 
-    def safety_agent(self, report_id: str, full_text: str):
-        context = self._retrieve("safety environment hazard risk site conditions", report_id)
-        prompt = f"""You are a construction safety and environmental risk specialist.
-Review the report for safety provisions, environmental concerns, and site hazards.
-Flag missing safety measures or environmental risks.
+    def key_insights_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("important findings risks action items recommendations insights", report_id)
+        prompt = f"""You are a document insights analyst.
+Extract the most important findings, risks, action items, and recommendations from the document content.
+Group the output into clear categories and keep it concise.
 
-Report Sections:
+Document Sections:
 {context}"""
-        return self.llm.chat(system_prompt=prompt, user_message="Provide your safety and environmental assessment.")
+        return self.llm.chat(system_prompt=prompt, user_message="Extract key insights and recommendations.")
 
-    def reviewer_agent(self, assessments: dict):
+    def document_compliance_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("required sections signatures dates clauses mandatory information compliance", report_id)
+        prompt = f"""You are a document compliance analyst.
+Review the document content for missing mandatory sections, signatures, dates, clauses, or required information.
+Flag omissions clearly and distinguish between present and missing items.
+
+Document Sections:
+{context}"""
+        return self.llm.chat(system_prompt=prompt, user_message="Assess document compliance and missing requirements.")
+
+    def annotation_agent(self, report_id: str, full_text: str):
+        context = self._retrieve("important passage notable section key clause significant statement", report_id)
+        prompt = f"""You are a document annotation specialist.
+Identify important portions of the document that should be highlighted for downstream review.
+Describe why each passage is significant and categorize it appropriately.
+
+Document Sections:
+{context}"""
+        return self.llm.chat(system_prompt=prompt, user_message="Generate annotations for important document content.")
+
+    def response_composer(self, assessments: dict):
         summary = "\n\n".join([f"{k.upper()}:\n{v}" for k, v in assessments.items()])
-        prompt = f"""You are the lead reviewer synthesizing assessments from 5 specialist agents.
-Based on their findings, produce:
-1. An overall risk score (0-100, higher = riskier)
-2. A Go / Revise / No-Go recommendation
-3. Top 3 critical issues
-4. A brief executive summary
+        prompt = f"""You are the lead document intelligence reviewer.
+Synthesize the outputs from the specialist agents into a structured response.
+Produce:
+1. A concise overall summary
+2. The most relevant findings
+3. Priority actions or recommendations
+4. Any notable compliance concerns
 
 Agent Assessments:
 {summary}"""
-        return self.llm.chat(system_prompt=prompt, user_message="Provide your final consolidated review.")
+        return self.llm.chat(system_prompt=prompt, user_message="Compose the final document intelligence response.")
 
     def run(self, report_id: str, full_text: str):
         assessments = {
-            "engineering": self.engineering_agent(report_id, full_text),
-            "cost": self.cost_engine.analyze(full_text),
-            "timeline": self.timeline_agent(report_id, full_text),
-            "compliance": self.compliance_agent(report_id, full_text),
-            "safety": self.safety_agent(report_id, full_text),
+            "executive_summary": self.executive_summary_agent(report_id, full_text),
+            "semantic_search": self.semantic_search_agent(report_id, full_text),
+            "citation": self.citation_agent(report_id, full_text),
+            "key_insights": self.key_insights_agent(report_id, full_text),
+            "document_compliance": self.document_compliance_agent(report_id, full_text),
+            "annotation": self.annotation_agent(report_id, full_text),
         }
-        assessments["reviewer"] = self.reviewer_agent(assessments)
+        assessments["response_composer"] = self.response_composer(assessments)
         return assessments
     

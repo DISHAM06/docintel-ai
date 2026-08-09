@@ -9,7 +9,7 @@ sentence-transformers
 pypdf
 python-multipart
 groq
-pyton-dotenv
+python-dotenv
 uvicorn
 fastapi
 python-multipart

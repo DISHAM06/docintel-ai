@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from src.orchestrator import Orchestrator
 from fastapi.responses import FileResponse
-from src.report_annotator import annotate_pdf
+from src.document_annotator import annotate_pdf
 
 
 import shutil
@@ -10,7 +10,7 @@ import os
 
 
 
-app = FastAPI(title="SiteSentry API", version="1.0.0")
+app = FastAPI(title="DocIntel API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,7 +25,7 @@ orchestrator = Orchestrator()
 
 @app.get("/")
 def health_check():
-    return {"status": "SiteSentry API is running"}
+    return {"status": "DocIntel API is running"}
 
 @app.post("/analyze")
 async def analyze_report(
@@ -76,4 +76,4 @@ async def analyze_and_annotate(
 @app.get("/download/{filename}")
 def download_annotated(filename: str):
     path = f"outputs/annotated_{filename}"
-    return FileResponse(path, media_type="application/pdf", filename=f"SiteSentry_{filename}")
+    return FileResponse(path, media_type="application/pdf", filename=f"DocIntel_{filename}")

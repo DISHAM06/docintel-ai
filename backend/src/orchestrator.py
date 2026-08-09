@@ -1,33 +1,32 @@
 from src.loader import load_and_chunk_report
 from src.vectorstore import ReportVectorStore
 from src.agents import AgentPanel
-import uuid 
+import uuid
 import os
+
 
 class Orchestrator:
     """
-
-    Main pipeline coordinator for SiteSentry.
-    Handles: PDF loading -> chunking -> storing -> running agents -> returning scorecard.
+    Main pipeline coordinator for DocIntel.
+    Handles: document loading -> chunking -> storing -> running agents -> returning document intelligence results.
     """
 
-
     def __init__(self):
-        self.store= ReportVectorStore()
-        self.panel= AgentPanel()
+        self.store = ReportVectorStore()
+        self.panel = AgentPanel()
 
-    def process(self, pdf_path: str, project_type: str ="residential", city_tier: str ="tier_2"):
+    def process(self, pdf_path: str, project_type: str = "business", city_tier: str = "tier_2"):
         """
-        Full pipeline from PDF upload to final scorecard.
+        Full pipeline from document upload to final document intelligence response.
         Returns structured result with all agent outputs.
         """
 
         # Step 1: Load and chunk
         chunks = load_and_chunk_report(pdf_path)
         if not chunks:
-            return {"error": "Could not extract text from PDF"}
+            return {"error": "Could not extract text from document"}
 
-        # Step 2: Generate unique report ID
+        # Step 2: Generate a unique document ID
         report_id = str(uuid.uuid4())[:8]
 
         # Step 3: Store in ChromaDB
@@ -39,10 +38,15 @@ class Orchestrator:
         # Step 5: Run agent panel
         results = self.panel.run(report_id, full_text)
 
+        document_type = project_type
+        jurisdiction_tier = city_tier
+
         return {
             "report_id": report_id,
-            "project_type": project_type,
-            "city_tier": city_tier,
+            "project_type": document_type,
+            "document_type": document_type,
+            "city_tier": jurisdiction_tier,
+            "jurisdiction_tier": jurisdiction_tier,
             "total_chunks": len(chunks),
-            "agents": results
+            "agents": results,
         }

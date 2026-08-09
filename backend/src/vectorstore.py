@@ -4,10 +4,10 @@ from chromadb.utils import embedding_functions
 class ReportVectorStore:
     """
     Wraps ChromaDB to store and query chunks from an uploaded
-    construction project report.
+    document intelligence source.
     """
 
-    def __init__(self, persist_dir: str = "chroma_db", collection_name: str= "site_reports"):
+    def __init__(self, persist_dir: str = "chroma_db", collection_name: str = "docintel_documents"):
         # PersistentClient saves data to disk automatically - no maual 
         self.client = chromadb.PersistentClient(path=persist_dir)
 
